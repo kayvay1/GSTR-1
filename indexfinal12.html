@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSTR-1 Excel to JSON Converter</title>
+    <link rel="stylesheet" href="./style.css">
+ 
+</head>
+<body>
+    <header>
+        <h2>
+            GSTR-1 TOOL
+        </h2>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Login</a>
+        </nav>
+    </header>
+    
+ 
+
+    <h2 class="mainheading">GSTR-1 Excel to JSON Converter</h2>
+
+    <form id="gstr1deshbord">
+        <input type="text" name="" id="mygst" placeholder="Enter Your GSTIN">
+        <select name="" id="fyselect">
+            <option value="">Select FY</option>
+            <option value="042024">April-2024</option>
+            <option value="052024">May-2024</option>
+            <option value="062024">Jun-2024</option>
+            <option value="072024">July-2024</option>
+            <option value="082024">Aug-2024</option>
+            <option value="092024">Sep-2024</option>
+            <option value="102024">Oct-2024</option>
+            <option value="112024">Nov-2024</option>
+            <option value="122024">Dec-2024</option>
+            <option value="012025">Jan-2025</option>
+            <option value="022025">Feb-2025</option>
+            <option value="032025">Mar-2025</option>
+        </select>
+
+        <button type="submit">Next</button>
+    </form>
+
+
+    <form id="upload-form">
+        <label for="excelFile" class="file-upload-btn">Upload GSTR-1 Excel File:</label>
+        <input type="file" id="excelFile" accept=".xlsx, .xls" required />
+        <button type="submit">Convert to JSON</button>
+    </form>
+
+
+    <div id="result">
+        <!-- <h3>Download JSON</h3> -->
+        <a id="downloadLink" href="#" download="gstr1.json">
+            <button>Download JSON File</button>
+        </a>
+
+        <br>
+        <br>
+
+
+        <div>
+            <p><h2>GSTR-1 Import Sucessfully ! </h2> Please Check Your Summery. </p>
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
+                <thead>
+                    <tr class="trhead">
+                        <th>Column</th>
+                        <th>Taxable Value</th>
+                        <th>IGST</th>
+                        <th>CGST</th>
+                        <th>SGST</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                   
+                    <tr>
+                        <td>B2B Sale</td>
+                        <td id="b2btaxabletable">0</td>
+                        <td id="b2bigsttable">0</td>
+                        <td id="b2bcgsttable">0</td>
+                        <td id="b2bsgsttable">0</td>
+                    </tr>
+                    <tr>
+                        <td>B2C Sale</td>
+                        <td id="b2ctaxabletable"></td>
+                        <td id="b2cigsttable"></td>
+                        <td id="b2ccgsttable"></td>
+                        <td id="b2csgsttable"></td>
+                    </tr>
+                    <tr>
+                        <td>CDNR </td>
+                        <td id="cdnrtaxabletable"></td>
+                        <td id="cdnrigsttable"></td>
+                        <td id="cdnrcgsttable"></td>
+                        <td id="cdnrsgsttable"></td>
+                    </tr>
+                    
+                    <tr style="border: 2px black solid; font-weight: 700;"> 
+                        <td style="font-weight: 700;" >Final Total Of B2B+B2C-CDNR </td>
+                        <td style="font-weight: 700;" id="finaltaxable"></td>
+                        <td style="font-weight: 700;" id="finaligst"></td>
+                        <td style="font-weight: 700;" id="finalcgst"></td>
+                        <td style="font-weight: 700;" id="finalsgst"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br><br>
+
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
+                <thead>
+                    <tr class="trhead">
+                        <th>HSN CODE</th>
+                        <!-- <th>Description</th> -->
+                        <!-- <th>UQC</th> -->
+                        <!-- <th>QTY</th> -->
+                        <th>Taxable Value</th>
+                        <th>RATE %</th>
+                        <th>IGST Value</th>
+                        <th>CGST Value</th>
+                        <th>SGST Value</th>
+                        <th>CESS Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- <th>NA</th> -->
+                        <!-- <th>NA</th> -->
+                        <!-- <th>NA</th> -->
+                        <th id="hsncodeqty"></th>
+                        <th id="hsncodetaxable"></th>
+                        <th>NA</th>
+                        <th id="hsncodeigst"></th>
+                        <th id="hsncodecgst"></th>
+                        <th id="hsncodesgst"></th>
+                        <th id="hsncodecess"></th>
+                    </tr>
+                </tbody>
+
+            </table>
+            <br><br>
+            <hr>
+            <br><br>
+
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;"> 
+                <thead>
+                    <tr class="trhead">
+                        <th>Column</th>
+                        <th>Taxable Value</th>
+                        <th>IGST</th>
+                        <th>CGST</th>
+                        <th>SGST</th>
+                        <th>CESS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <th>Differance in HSN vs Sale</th>
+                        <th id="difftaxable"></th>
+                        <th id="diffigst"></th>
+                        <th id="diffcgst"></th>
+                        <th id="diffsgst"></th>
+                        <th id="diffcess"></th>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+    <script>
+        document.getElementById('upload-form').style.display = 'none';
+         let mygst, fillingperiod, gstFirstTwo ;
+         let b2btaxable, b2bigst, b2bcgst, b2bsgst;
+         let b2ctaxable, b2cigst, b2ccgst, b2csgst;
+         let cdnrtaxable, cdnrigst, cdnrcgst, cdnrsgst;
+         let logTotalTaxableValue = 0, logtotaligst = 0, logtotalcgst=0, logtotalsgst=0;
+         let hsncode = 0, hsncodedec = 0, hsncodeuqc = 0, hsncodeqty = 0, hsncodetaxable = 0, hsncoderate=0, hsncodeigst=0, hsncodecgst=0, hsncodesgst=0, hsncodecess =0 ; 
+         let difftaxable = 0, diffigst = 0, diffcgst = 0, diffsgst = 0, diffcess = 0;
+
+
+        
+
+
+         document.getElementById('mygst').addEventListener('input', function(){
+             mygst  = document.getElementById("mygst").value
+             document.getElementById("mygst").value = mygst.toUpperCase() 
+         })
+
+        document.getElementById('gstr1deshbord').addEventListener('submit', function(e){
+            e.preventDefault()
+             mygst  = document.getElementById("mygst").value   // ||'24AJGPD8911J1ZA';  // GST number
+             fillingperiod =  document.getElementById("fyselect").value   // || '112024';     // Filing period (optional)
+
+             if (!mygst || !fillingperiod) {
+                alert("Please fill in GSTIN and Select Filing Period.");
+                return;
+            }
+
+            let gstPattern = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9A-Z]{1}Z[A-Z0-9]{1}$/;
+            if (!gstPattern.test(mygst)) {
+        alert("Invalid GSTIN format. Please enter a valid GSTIN.");
+             } else {
+        console.log("Valid GSTIN:", mygst);
+            document.getElementById('gstr1deshbord').style.display = 'none';  // Hide the first form
+            document.getElementById('upload-form').style.display = 'block';
+             }
+
+
+            gstFirstTwo = mygst.substring(0, 2);
+})          
+
+document.getElementById('excelFile').addEventListener('change', function (event) {
+    const fileInput = event.target;
+    const fileName = fileInput.files[0] ? fileInput.files[0].name : 'No file selected';
+     document.querySelector('.file-upload-btn').textContent = fileName
+});
+
+        document.getElementById('upload-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('excelFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please upload an Excel file');
+                return;
+            }
+           
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                // Define the required sheets to process
+                const requiredSheets = ['b2b,sez,de', 'b2b', 'b2cs', 'cdnr', 'hsn', 'docs'];
+                let gstJson = {
+                    gstin: mygst || 'Enter Your Gst Number',
+                    fp: fillingperiod || 'Enter Filling Month'
+                };
+
+                // Loop through the required sheets and process them
+                requiredSheets.forEach(sheetName => {
+                    if (workbook.SheetNames.includes(sheetName)) {
+                        const sheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                        switch (sheetName) {
+                            case 'b2b,sez,de':
+                            case  'b2b':
+                                const b2bData = processB2BData(jsonData);
+                                if (b2bData.length > 0) gstJson.b2b = b2bData;
+                                break;
+                            case 'b2cs':
+                                const b2csData = processB2CSData(jsonData);
+                                if (b2csData.length > 0) gstJson.b2cs = b2csData;
+                                break;
+                            case 'cdnr':
+                                const cdnrData = processCDNRData(jsonData);
+                                if (cdnrData.length > 0) gstJson.cdnr = cdnrData;
+                                break;
+                            case 'hsn':
+                                const hsnData = processHSNData(jsonData);
+                                if (hsnData.length > 0) gstJson.hsn = { data: hsnData };
+                                break;
+                            case 'docs':
+                                const docsData = processDocsData(jsonData);
+                                if (docsData.length > 0) gstJson.doc_issue = { doc_det: docsData };
+                                break;
+                        }
+                    }
+                });
+
+                // Add hash and version at the end
+                gstJson.hash = "hash";
+                gstJson.version = "GST1.00";
+
+                // Convert the object to JSON and create a downloadable file
+                const jsonBlob = new Blob([JSON.stringify(gstJson, null, 2)], { type: 'application/json' });
+                const jsonUrl = URL.createObjectURL(jsonBlob);
+                document.getElementById('downloadLink').href = jsonUrl;
+                document.getElementById('result').style.display = 'block';
+            };
+           
+            reader.readAsArrayBuffer(file);
+        });
+
+        // Check if the row is not blank
+        function isNotBlank(row) {
+            return row.some(cell => cell !== null && cell !== undefined && cell !== "");
+        }
+
+        // Date formatting function to convert to dd-mm-yyyy
+        function formatDate(date) {
+            const d = new Date(date);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+        // Function to trim any string value to remove leading and trailing spaces
+        function trimString(value) {
+            return typeof value === 'string' ? value.trim() : value;
+        }
+
+        // Processing B2B sheet with the updated logic
+        function processB2BData(excelData) {
+            const b2bData = [];
+            b2btaxable = 0;
+            b2bigst = 0 ;
+            b2bcgst = 0 ;
+            b2bsgst = 0;
+
+            excelData.forEach((row, index) => {
+                if (index > 3 && isNotBlank(row)) { // Skip first 4 rows and blank rows
+                    const posFirstTwo = trimString(row[5]).substring(0, 2); // Place of supply (first two characters)
+                    const inv_typfrist = trimString(row[8]).substring(0,1);
+
+                    let iamt = row[11] * row[10] / 100; // Default IGST value
+                    let camt = 0;  // Default CGST value
+                    let csamt = 0; // Default SGST value
+
+                    // If first two characters of pos and GST number match
+                    if (posFirstTwo === gstFirstTwo) {
+                        iamt = 0;
+                        camt = row[11] * row[10]/2 / 100;
+                        csamt = row[11] * row[10]/2 / 100;
+                    }
+                    b2btaxable += row[11]
+                    b2bigst += iamt
+                    b2bcgst += camt
+                    b2bsgst += csamt
+                  
+
+                    b2bData.push({
+                        "ctin": trimString(row[0]),  // GSTIN
+                        "inv": [{
+                            "inum": trimString(row[2]),  // Invoice number
+                            "idt": formatDate(row[3]),   // Invoice date (formatted)
+                            "val": row[4],   // Invoice value
+                            "pos": posFirstTwo,   // Place of supply (first two characters)
+                            "rchrg": trimString(row[6]), // Reverse charge
+                            "inv_typ": inv_typfrist, // Invoice type
+                            "itms": [{
+                                "num": 1,  // Item number
+                                "itm_det": {
+                                    "rt": row[10],  // Rate
+                                    "txval": row[11], // Taxable value
+                                    "iamt": iamt,  // IGST
+                                    "camt": camt, // CGST
+                                    "csamt": csamt, // SGST
+                                    "samt": row[12] // State tax
+                                }
+                            }]
+                        }]
+                    });
+                }
+            });
+
+            document.getElementById('b2btaxabletable').textContent = b2btaxable
+            document.getElementById('b2bigsttable').textContent = b2bigst
+            document.getElementById('b2bcgsttable').textContent = b2bcgst
+            document.getElementById('b2bsgsttable').textContent = b2bsgst
+
+            console.log("Total txval for all B2B rows: ", b2btaxable + " igst " + b2bigst + " cgst " + b2bcgst + " sgst " + b2bsgst);
+            
+            return b2bData;
+        }
+        
+        // Processing B2CS sheet
+        function processB2CSData(excelData) {
+            const b2csData = [];
+            b2ctaxable = 0;
+            b2cigst = 0;
+            b2ccgst = 0;
+            b2csgst = 0;
+
+            excelData.forEach((row, index) => {
+                if (index > 3 && isNotBlank(row)) { // Skip first 4 rows and blank rows
+                    
+                    const b2csplytyp = trimString(row[1]).substring(0,2);
+                    let iamt = row[4] * row[3] / 100; // Default IGST value
+                    let camt = 0;  // Default CGST value
+                    let csamt = 0; // Default SGST value
+                    let sply_ty = 'INTER';
+
+                    if(b2csplytyp === gstFirstTwo){
+                        iamt = 0;
+                        camt = row[4] * row[3]/2  / 100;
+                        csamt = row[4] * row[3]/2  / 100;
+                        sply_ty = 'INTRA';
+                    }
+
+                    b2ctaxable += row[4]
+                    b2cigst += iamt
+                    b2ccgst += camt
+                    b2csgst += csamt
+
+                    
+                    b2csData.push({
+                        "sply_ty": sply_ty,  // Supply type
+                        "txval": row[4],    // Taxable value
+                        "typ": row[0],      // Type 0
+                        "pos": b2csplytyp,     // Place of supply 1
+                        "rt": row[3],       // Rate 2
+                        "iamt": iamt,     // IGST
+                        "camt": camt,     // CGST
+                        "samt": csamt,     // SGST
+                        "csamt": row[5]     // State tax
+                    });
+                }
+            });
+
+            document.getElementById("b2ctaxabletable").textContent = b2ctaxable
+            document.getElementById("b2cigsttable").textContent = b2cigst
+            document.getElementById("b2ccgsttable").textContent = b2ccgst
+            document.getElementById("b2csgsttable").textContent = b2csgst
+
+            return b2csData;
+        }
+
+        // Processing CDNR sheet
+        function processCDNRData(excelData) {
+            const cdnrData = [];
+            cdnrtaxable = 0;
+            cdnrigst = 0;
+            cdnrcgst = 0;
+            cdnrsgst = 0;
+
+            excelData.forEach((row, index) => {
+                if (index > 3 && isNotBlank(row)) { // Skip first 4 rows and blank rows
+
+                    let cdnrpos = trimString(row[5]).substring(0, 2);
+                    let cdnrinv_typ = trimString(row[7]).substring(0, 1);
+                    let iamt = row[11] * row[10] / 100; // Default IGST value
+                    let camt = 0;  // Default CGST value
+                    let csamt = 0; // Default SGST value
+                    let sply_ty = 'INTER';
+
+                    if(cdnrpos === gstFirstTwo){
+                        iamt = 0;
+                        camt = row[11] * row[10]/2  / 100;
+                        csamt = row[11] * row[10]/2  / 100;
+                    }
+
+                    cdnrtaxable += row[11]
+                    cdnrigst  += iamt
+                    cdnrcgst  += camt
+                     cdnrsgst  += csamt
+
+                    cdnrData.push({
+                        "ctin": trimString(row[0]),  // GSTIN
+                        "nt": [{
+                            "ntty": trimString(row[4]),  // Note type 4
+                            "val": row[8],    // Value 8
+                            "itms": [{
+                                "num": 1,  // Item number 
+                                "itm_det": {
+                                    "rt": row[10],  // Rate 10
+                                    "txval": row[11], // Taxable value 11
+                                    "iamt": iamt,  // IGST
+                                    "camt": camt,  // CGST
+                                    "csamt": csamt, // SGST
+                                    "samt": row[12]   // State tax
+                                }
+                            }], 
+                            "nt_num": row[2],  // Note number 2
+                            "nt_dt": formatDate(row[3]),  // Note date  3
+                            "pos": cdnrpos,    // Place of supply 5
+                            "rchrg": trimString(row[6]),  // Reverse charge 6
+                            "inv_typ": cdnrinv_typ // Invoice type 7
+                        }]
+                    });
+                }
+            });
+
+            document.getElementById("cdnrtaxabletable").textContent = 0-cdnrtaxable               
+            document.getElementById("cdnrigsttable").textContent =   0 - cdnrigst                      
+            document.getElementById("cdnrcgsttable").textContent =   0 - cdnrcgst                      
+            document.getElementById("cdnrsgsttable").textContent =       0 - cdnrsgst        
+
+           
+            return cdnrData;
+        }
+
+        // Processing HSN sheet
+        function processHSNData(excelData) {
+            const hsnData = [];
+            excelData.forEach((row, index) => {
+                if (index > 3 && isNotBlank(row)) { // Skip first 4 rows and blank rows
+
+                    hsncodeqty += row[3]
+                    hsncodetaxable += row[6]
+                    hsncodeigst += row[7]
+                    hsncodecgst += row[8]
+                    hsncodesgst += row[9]
+                    hsncodecess += row[10]
+
+
+                    hsnData.push({
+                        "num": index-3,       // Item number
+                        "hsn_sc": trimString(row[0]),
+                        "desc": trimString(row[1]),  // HSN code
+                        "uqc": row[2].substring(0, 3),      // Unit of Quantity
+                        "qty": row[3],      // Quantity
+                        "txval": row[6],    // Taxable value
+                        "iamt": row[7],     // IGST
+                        "camt": row[8],     // CGST
+                        "samt": row[9],     // SGST
+                        "csamt": row[10],    // State tax
+                        "rt": row[5]        // Rate
+                    });
+                }
+            });
+
+            document.getElementById("hsncodeqty").textContent = hsncodeqty
+            document.getElementById("hsncodetaxable").textContent = hsncodetaxable
+            document.getElementById("hsncodeigst").textContent = hsncodeigst
+            document.getElementById("hsncodecgst").textContent = hsncodecgst
+            document.getElementById("hsncodesgst").textContent = hsncodesgst
+            document.getElementById("hsncodecess").textContent = hsncodecess
+
+            TotalTaxableValue()
+            return hsnData;
+        }
+
+        // Processing Docs sheet
+        function processDocsData(excelData) {
+            const docData = [];
+            
+  
+
+
+            excelData.forEach((row, index) => {
+                let natureofDocument = ""
+            if(trimString(row[0]) === "Invoices for outward supply"){
+                natureofDocument = 1
+            } else if( trimString(row[0]) === "Invoices for inward supply from unregistered person"){
+                natureofDocument = 2
+            } else if( trimString(row[0]) === "Revised Invoice"){
+                natureofDocument = 3
+            } else if( trimString(row[0]) === "Debit Note"){
+                natureofDocument = 4
+            } else if( trimString(row[0]) === "Credit Note"){
+                natureofDocument = 5
+            } else if( trimString(row[0]) === "Receipt Voucher"){
+                natureofDocument = 6
+            }
+
+                if (index > 3 && isNotBlank(row)) { // Skip first 4 rows and blank rows
+                    docData.push({
+                        "doc_num": natureofDocument,  // Document number 0
+                        "docs": [{
+                            "num": 1,       // Item number
+                            "from": trimString(row[1]),     // From 1
+                            "to": trimString(row[2]),       // To 2
+                            "totnum": row[3],   // Total number 3
+                            "cancel": row[4],   // Cancelled 4
+                            "net_issue": row[3]-row[4] // Net issue 4-3
+                        }]
+                    });
+                }
+            });
+            return docData;
+        }
+
+      
+      
+
+        function TotalTaxableValue() {
+            logTotalTaxableValue = b2btaxable + b2ctaxable - cdnrtaxable
+            logtotaligst = b2bigst + b2cigst - cdnrigst
+            logtotalcgst = b2bcgst + b2ccgst - cdnrcgst
+            logtotalsgst = b2bsgst + b2csgst - cdnrsgst
+
+            document.getElementById("finaltaxable").textContent = logTotalTaxableValue
+            document.getElementById("finaligst").textContent = logtotaligst
+            document.getElementById("finalcgst").textContent = logtotalcgst
+            document.getElementById("finalsgst").textContent = logtotalsgst
+
+            document.getElementById("difftaxable").textContent = logTotalTaxableValue - hsncodetaxable
+            document.getElementById("diffigst").textContent = logtotaligst - hsncodeigst
+            document.getElementById("diffcgst").textContent = logtotalcgst - hsncodecgst
+            document.getElementById("diffsgst").textContent = logtotalsgst - hsncodesgst
+            document.getElementById("diffcess").textContent = 0
+
+
+
+    console.log("Total Taxable Value (B2B + B2C + CDNR):", logTotalTaxableValue + " " + logtotaligst + " " + logtotalcgst + " " + logtotalsgst);
+}
+
+
+    </script>
+
+</body>
+</html>
